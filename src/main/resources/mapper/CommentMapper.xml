@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhieasy.blog.Mapper.CommentMapper">
+    <resultMap id="CommentResultMap" type="com.zhieasy.blog.entity.Comment">
+        <id property="id" column="id"/>
+        <result property="blogId" column="blog_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhieasy.blog.entity.Comment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment (blog_id, user_id, parent_id, content, create_time)
+        VALUES (#{blogId}, #{userId}, #{parentId}, #{content}, NOW())
+    </insert>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM comment WHERE id = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="int" resultMap="CommentResultMap">
+        SELECT * FROM comment WHERE id = #{id}
+    </select>
+
+    <select id="selectByBlogId" parameterType="int" resultMap="CommentResultMap">
+        SELECT * FROM comment WHERE blog_id = #{blogId} ORDER BY create_time ASC
+    </select>
+
+    <select id="selectByParentId" parameterType="int" resultMap="CommentResultMap">
+        SELECT * FROM comment WHERE parent_id = #{parentId} ORDER BY create_time ASC
+    </select>
+
+    <select id="selectByBlogIdAndParentId" resultMap="CommentResultMap">
+        SELECT * FROM comment WHERE blog_id = #{blogId} AND parent_id = #{parentId} ORDER BY create_time ASC
+    </select>
+
+    <select id="selectByUserId" parameterType="int" resultMap="CommentResultMap">
+        SELECT * FROM comment WHERE user_id = #{userId} ORDER BY create_time DESC
+    </select>
+</mapper>
