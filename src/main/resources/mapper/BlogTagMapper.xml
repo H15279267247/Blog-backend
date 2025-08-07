@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhieasy.blog.Mapper.BlogTagMapper">
+    <resultMap id="BlogTagResultMap" type="com.zhieasy.blog.entity.BlogTag">
+        <id property="id" column="id"/>
+        <result property="blogId" column="blog_id"/>
+        <result property="tagId" column="tag_id"/>
+    </resultMap>
+
+    <resultMap id="TagResultMap" type="com.zhieasy.blog.entity.Tag">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhieasy.blog.entity.BlogTag" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog_tag (blog_id, tag_id) VALUES (#{blogId}, #{tagId})
+    </insert>
+
+    <delete id="deleteByBlogId" parameterType="int">
+        DELETE FROM blog_tag WHERE blog_id = #{blogId}
+    </delete>
+
+    <delete id="deleteByBlogIdAndTagId">
+        DELETE FROM blog_tag WHERE blog_id = #{blogId} AND tag_id = #{tagId}
+    </delete>
+
+    <select id="selectTagsByBlogId" parameterType="int" resultMap="TagResultMap">
+        SELECT t.* FROM tag t
+                            INNER JOIN blog_tag bt ON t.id = bt.tag_id
+        WHERE bt.blog_id = #{blogId}
+        ORDER BY t.id ASC
+    </select>
+
+    <select id="selectByBlogId" parameterType="int" resultMap="BlogTagResultMap">
+        SELECT * FROM blog_tag WHERE blog_id = #{blogId}
+    </select>
+</mapper>
