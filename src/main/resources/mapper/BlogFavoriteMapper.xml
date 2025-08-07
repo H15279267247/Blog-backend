@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhieasy.blog.Mapper.BlogFavoriteMapper">
+    <resultMap id="BlogFavoriteResultMap" type="com.zhieasy.blog.entity.BlogFavorite">
+        <id property="id" column="id"/>
+        <result property="blogId" column="blog_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhieasy.blog.entity.BlogFavorite" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog_favorite (blog_id, user_id, create_time)
+        VALUES (#{blogId}, #{userId}, NOW())
+    </insert>
+
+    <delete id="deleteByBlogIdAndUserId">
+        DELETE FROM blog_favorite WHERE blog_id = #{blogId} AND user_id = #{userId}
+    </delete>
+
+    <select id="selectByBlogIdAndUserId" resultMap="BlogFavoriteResultMap">
+        SELECT * FROM blog_favorite WHERE blog_id = #{blogId} AND user_id = #{userId}
+    </select>
+
+    <select id="selectByUserId" parameterType="int" resultMap="BlogFavoriteResultMap">
+        SELECT * FROM blog_favorite WHERE user_id = #{userId} ORDER BY create_time DESC
+    </select>
+</mapper>
